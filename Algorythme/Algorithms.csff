@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using Algorythme.MyCollections;
+
+namespace Algorythme
+{
+    namespace MyCollections // Code Taken From Microsoft http://msdn.microsoft.com/en-us/library/aa645739(v=vs.71).aspx
+        {
+           using System.Collections;
+
+        public class ValueChangedEventArgs : EventArgs
+        {
+            public int NewIndex { get; set; }
+            public object NewValue { get; set; }
+        }
+
+           // A delegate type for hooking up change notifications.
+           public delegate void ChangedEventHandler(object sender, EventArgs e);
+
+           // A class that works just like ArrayList, but sends event
+           // notifications whenever the list changes.
+           public class ListWithChangedEvent: ArrayList
+           {
+              // An event that clients can use to be notified whenever the
+              // elements of the list change.
+              public event ChangedEventHandler Changed;
+
+              // Invoke the Changed event; called whenever list changes
+              protected virtual void OnChanged(EventArgs e) 
+              {
+                 if (Changed != null)
+                    Changed(this, e);
+              }
+
+              // Override some of the methods that can change the list;
+              // invoke event after each
+              public override int Add(object value) 
+              {
+                 int i = base.Add(value);
+                 OnChanged(EventArgs.Empty);
+                 return i;
+              }
+
+              public override void Clear() 
+              {
+                 base.Clear();
+                 OnChanged(EventArgs.Empty);
+              }
+
+              public override object this[int index] 
+              {
+                 set 
+                 {
+                    base[index] = value;
+                    ValueChangedEventArgs args = new ValueChangedEventArgs();
+                    args.NewIndex = index;
+                    args.NewValue = base[index];
+                    OnChanged(args);
+                 }
+              }
+           }
+        }
+    static class ArrayExtensions // Taken from grenade@http://stackoverflow.com/a/1262619
+   {
+
+       public static void Shuffle(this IList list) 
+       {
+           Random rng = new Random();
+           int n = list.Count;
+           while (n > 1)
+           {
+               n--;
+               int k = rng.Next(n + 1);
+               var value = list[k];
+               list[k] = list[n];
+               list[n] = value;
+           }
+       }
+   }
+    class Algorithms
+    {
+
+        public ListWithChangedEvent Tab { get; set; }
+        public int TabSize { get; set; } // Size of the sorted array
+        public int Delay { get; set; } // Time to way after a swap happens (in ms)
+        public Algorithms(int tabsize, int delay)
+        {
+            Delay = delay;
+            this.TabSize = tabsize;
+            this.Tab = new ListWithChangedEvent();
+
+            initTab();
+        }
+
+        private void initTab()
+        {
+            for (int i=0;i<TabSize;i++)
+            {
+                Tab.Add(i);
+            }
+        }
+
+
+        public void shuffleTab()
+        {
+            Tab.Shuffle();
+        }
+
+        private void SwapAndSleep(ref int a, ref int b)
+        {
+
+        }
+
+        public void bubbleSort()
+        {
+            int i;
+            int j;
+            int temp;
+
+            for (i = (TabSize - 1); i >= 0; i--)
+            {
+                for (j = 1; j <= i; j++)
+                {
+                    if ((int)Tab[j - 1] > (int)Tab[j])
+                    {
+                        temp = (int)Tab[j - 1];
+                        Tab[j - 1] = Tab[j];
+                        Tab[j] = temp;
+                        System.Threading.Thread.Sleep(Delay);
+                    }
+                }
+            }
+        }
+        public void quicksort(int left, int right)
+        {
+            int i = left, j = right;
+            int pivot = (int)Tab[(left + right) / 2];
+
+            while (i <= j)
+            {
+                while ((int)Tab[i] < pivot)
+                {
+                    i++;
+                }
+
+                while ((int)Tab[j] > pivot)
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    // Swap
+                    int tmp = (int)Tab[i];
+                    Tab[i] = Tab[j];
+                    Tab[j] = tmp;
+                    System.Threading.Thread.Sleep(Delay);
+                    i++;
+                    j--;
+                }
+            }
+
+            // Recursive calls
+            if (left < j)
+            {
+                quicksort(left, j);
+            }
+
+            if (i < right)
+            {
+                quicksort(i, right);
+            }
+        }
+
+    }
+}
