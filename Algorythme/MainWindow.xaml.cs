@@ -203,7 +203,7 @@ namespace Algorythme
                 }));
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
             algo.Tab.Changed -= Tab_Changed;
             algo.shuffleTab();
@@ -211,7 +211,7 @@ namespace Algorythme
             addBars(canvas);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Start_Click(object sender, RoutedEventArgs e)
         {
             if (!worker.IsBusy)
             {

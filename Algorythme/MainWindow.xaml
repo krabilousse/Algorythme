@@ -5,10 +5,10 @@
     <Grid>
         <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <DockPanel VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#FF5D2269">
-                <Button x:Name="Shuffle" DockPanel.Dock="Left" Content="Shuffle" HorizontalAlignment="Right"  RenderTransformOrigin="1.609,-4.293" Click="Button_Click" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <Button x:Name="Shuffle" DockPanel.Dock="Left" Content="Shuffle" HorizontalAlignment="Right"  RenderTransformOrigin="1.609,-4.293" Click="Shuffle_Click" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <ComboBox DockPanel.Dock="Right" HorizontalAlignment="Right" Loaded="cbAlgos_Loaded" SelectionChanged="cbAlgos_SelectionChanged" Background="Black" BorderBrush="#FF1D1D1D" Foreground="Black" />
 
-                <Button Content="Start" Width="76" Click="Button_Click_1" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                <Button Content="Start" Width="76" Click="Start_Click" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}"/>
                 <DockPanel VerticalAlignment="Bottom" DockPanel.Dock="Right" HorizontalAlignment="Left">
                     <Label Content="Array Size" HorizontalAlignment="Right" Foreground="White"/>
                     <Slider VerticalAlignment="Center" x:Name="tabSizeSlider" DockPanel.Dock="Right" Width="200" Maximum="1000" Minimum="10" ValueChanged="tabSizeSlider_ValueChanged" Loaded="tabSizeSlider_Loaded"/>
