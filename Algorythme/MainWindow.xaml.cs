@@ -43,6 +43,7 @@ namespace Algorythme
         // Sound utilities
         private WaveOut waveOut;
         private SineWaveProvider32 sineWaveProvider = new SineWaveProvider32();
+        private Label text;
 
         public void StartStopSineWave()
         {
@@ -70,7 +71,7 @@ namespace Algorythme
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
 
-            algo = new Algorithms(10,10);
+            algo = new Algorithms(10, 10);
 
             EventListener tabListener = new EventListener(algo.Tab);
             algo.Tab.Changed += Tab_Changed;
@@ -119,7 +120,7 @@ namespace Algorythme
                     break;
             }
         }
-        
+
         void Tab_Changed(object sender, EventArgs e)
         {
             var args = e as ValueChangedEventArgs;
@@ -128,7 +129,7 @@ namespace Algorythme
                 if (canvas != null)
                 {
                     addBars(canvas);
-                    sineWaveProvider.Frequency = (int)(((double)args.NewIndex+1)/(double)algo.TabSize * 1000) + 450;
+                    sineWaveProvider.Frequency = (int)(((double)args.NewIndex + 1) / (double)algo.TabSize * 1000) + 450;
                 }
             }
         }
@@ -200,6 +201,14 @@ namespace Algorythme
                         Canvas.SetLeft(rect, leftShift + (i * actualBarWidth) + (i * separator));
                         canvas.Children.Add(rect);
                     }
+
+                    if (text == null) text = new Label();
+                    text.Content = "Array size : " + algo.TabSize + " elements\n" + "Delay after swap : " + algo.Delay + " ms";
+                    text.Foreground = new SolidColorBrush(Colors.LightSkyBlue);
+                    text.Background = new SolidColorBrush(Colors.Transparent);
+                    text.RenderTransform = new ScaleTransform(1, -1);
+                    Canvas.SetBottom(text, 1);
+                    canvas.Children.Add(text);
                 }));
             }
         }
@@ -218,7 +227,7 @@ namespace Algorythme
                 worker.RunWorkerAsync();
                 tabSize_Slider.IsEnabled = false;
                 cb_Algos.IsEnabled = false;
-                
+
                 StartStopSineWave();
             }
         }
@@ -228,7 +237,11 @@ namespace Algorythme
             var slider = sender as Slider;
             double value = slider.Value;
 
-            if (algo != null) algo.Delay = (int)value;
+            if (algo != null)
+            {
+                algo.Delay = (int)value;
+                addBars(canvas);
+            }
         }
 
         private void tabSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
