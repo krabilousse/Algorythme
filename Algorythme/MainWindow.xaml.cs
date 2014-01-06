@@ -115,7 +115,7 @@ namespace Algorythme
                 case "Merge Sort":
                     algo.mergeSort(0, algo.TabSize);
                     break;
-                case "Bogo Sort":
+                case "Bozo Sort":
                     algo.bogoSort();
                     break;
             }

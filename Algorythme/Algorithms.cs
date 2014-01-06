@@ -131,7 +131,7 @@ namespace Algorythme
                 "Heap Sort",
                 "Quick Sort",
                 "Merge Sort",
-                "Bogo Sort"
+                "Bozo Sort"
             };
             this.Tab = new ListWithChangedEvent();
 
