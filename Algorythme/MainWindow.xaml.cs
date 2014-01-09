@@ -96,7 +96,7 @@ namespace Algorythme
             switch (algo.CurrentAlgorithm)
             {
                 case "Quick Sort":
-                    algo.quicksort(0, algo.TabSize - 1);
+                    algo.quickSort(0, algo.TabSize - 1);
                     break;
                 case "Bubble Sort":
                     algo.bubbleSort();

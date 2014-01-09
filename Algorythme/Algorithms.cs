@@ -195,7 +195,7 @@ namespace Algorythme
                 }
             }
         }
-        public void quicksort(int left, int right)
+        public void quickSort(int left, int right)
         {
             int i = left, j = right;
             int pivot = (int)Tab[(left + right) / 2];
@@ -203,34 +203,42 @@ namespace Algorythme
                 {
                 while (i <= j)
                 {
+                    if (IsCanceled) break;
                     while ((int)Tab[i] < pivot)
                     {
                         i++;
+
+                        if (IsCanceled) break;
                     }
 
                     while ((int)Tab[j] > pivot)
                     {
                         j--;
+
+                        if (IsCanceled) break;
                     }
 
                     if (i <= j)
                     {
-                        // Swap
+                    // Swap
                         SwapAndSleep(i, j);
                         i++;
                         j--;
+                        
                     }
                 }
 
                 // Recursive calls
                 if (left < j)
                 {
-                    quicksort(left, j);
+                    if (!IsCanceled)
+                        quickSort(left, j);
                 }
 
                 if (i < right)
                 {
-                    quicksort(i, right);
+                    if (!IsCanceled)
+                        quickSort(i, right);
                 }
             }
         }
@@ -320,19 +328,20 @@ namespace Algorythme
                 if (!IsCanceled) { 
                     for (i = 0; i < TabSize; i++)
                     {
+                        if (IsCanceled) break;
                         j = i;
                         temp = (int)Tab[i];
                         if (!IsCanceled)
                         {
+                            if (IsCanceled) break;
                             while ((j >= increment) && ((int)Tab[j - increment] > temp))
                             {
-                                if (!IsCanceled)
-                                {
-                                    Tab[j] = Tab[j - increment];
-                                    System.Threading.Thread.Sleep(Delay);
-                                    CurrentBar = j;
-                                    j = j - increment;
-                                }
+                                if (IsCanceled) break;
+                                Tab[j] = Tab[j - increment];
+                                System.Threading.Thread.Sleep(Delay);
+                                CurrentBar = j;
+                                j = j - increment;
+                                
                             }
                         }
                         Tab[j] = temp;
