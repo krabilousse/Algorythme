@@ -116,6 +116,8 @@ namespace Algorythme
         public int TabSize { get; set; } // Size of the sorted array
         public int Delay { get; set; }
 
+        public bool IsCanceled { get; set; }
+
         public Algorithms(int tabsize, int delay)
         {
             Delay = delay;
@@ -144,6 +146,7 @@ namespace Algorythme
             {
                 Tab.Add(i);
             }
+            shuffleTab();
         }
 
         public void changeTabSize()
@@ -153,6 +156,7 @@ namespace Algorythme
             {
                 Tab.Add(i);
             }
+            shuffleTab();
         }
 
         // TOOLS
@@ -177,11 +181,16 @@ namespace Algorythme
 
             for (i = (TabSize - 1); i >= 0; i--)
             {
-                for (j = 1; j <= i; j++)
-                {
-                    if ((int)Tab[j - 1] > (int)Tab[j])
+                if (!IsCanceled) { 
+                    for (j = 1; j <= i; j++)
                     {
-                        SwapAndSleep(j, j - 1);
+                        if (!IsCanceled)
+                        {
+                            if ((int)Tab[j - 1] > (int)Tab[j])
+                            {
+                                SwapAndSleep(j, j - 1);
+                            }
+                        }
                     }
                 }
             }
@@ -190,37 +199,39 @@ namespace Algorythme
         {
             int i = left, j = right;
             int pivot = (int)Tab[(left + right) / 2];
-
-            while (i <= j)
-            {
-                while ((int)Tab[i] < pivot)
+            if (!IsCanceled)
                 {
-                    i++;
+                while (i <= j)
+                {
+                    while ((int)Tab[i] < pivot)
+                    {
+                        i++;
+                    }
+
+                    while ((int)Tab[j] > pivot)
+                    {
+                        j--;
+                    }
+
+                    if (i <= j)
+                    {
+                        // Swap
+                        SwapAndSleep(i, j);
+                        i++;
+                        j--;
+                    }
                 }
 
-                while ((int)Tab[j] > pivot)
+                // Recursive calls
+                if (left < j)
                 {
-                    j--;
+                    quicksort(left, j);
                 }
 
-                if (i <= j)
+                if (i < right)
                 {
-                    // Swap
-                    SwapAndSleep(i, j);
-                    i++;
-                    j--;
+                    quicksort(i, right);
                 }
-            }
-
-            // Recursive calls
-            if (left < j)
-            {
-                quicksort(left, j);
-            }
-
-            if (i < right)
-            {
-                quicksort(i, right);
             }
         }
         public void selectionSort()
@@ -229,15 +240,18 @@ namespace Algorythme
 
             for (int i = 0; i < TabSize; i++)
             {
-                k = i;
-                for (int j = i + 1; j < TabSize; j++)
+                if (!IsCanceled)
                 {
-                    if ((int)Tab[j] < (int)Tab[k])
+                    k = i;
+                    for (int j = i + 1; j < TabSize; j++)
                     {
-                        k = j;
+                        if ((int)Tab[j] < (int)Tab[k])
+                        {
+                            k = j;
+                        }
                     }
-                }
                 SwapAndSleep(k, i);
+                }
             }
         }
         public void insertionSort()
@@ -245,12 +259,14 @@ namespace Algorythme
             for (int i = 0; i < TabSize; i++)
             {
                 int value = (int)Tab[i], j = i - 1;
-                while (j >= 0 && (int)Tab[j] > value)
-                {
-                    Tab[j + 1] = Tab[j];
-                    CurrentBar = j + 1;
-                    System.Threading.Thread.Sleep(Delay);
-                    j--;
+                if (!IsCanceled) { 
+                    while (j >= 0 && (int)Tab[j] > value)
+                    {
+                        Tab[j + 1] = Tab[j];
+                        CurrentBar = j + 1;
+                        System.Threading.Thread.Sleep(Delay);
+                        j--;
+                    }
                 }
                 Tab[j + 1] = value;
             }
@@ -259,16 +275,19 @@ namespace Algorythme
         {
             //Build-Max-Heap
             int heapSize = TabSize;
-            for (int p = (heapSize - 1) / 2; p >= 0; p--)
-                maxHeapify(heapSize, p);
+            if (!IsCanceled) { 
+                for (int p = (heapSize - 1) / 2; p >= 0; p--)
+                    if (!IsCanceled) { maxHeapify(heapSize, p); }
+            }
+            if (!IsCanceled) { 
+                for (int i = TabSize - 1; i > 0; i--)
+                {
+                    //Swap
+                    SwapAndSleep(i, 0);
 
-            for (int i = TabSize - 1; i > 0; i--)
-            {
-                //Swap
-                SwapAndSleep(i, 0);
-
-                heapSize--;
-                maxHeapify(heapSize, 0);
+                    heapSize--;
+                    maxHeapify(heapSize, 0);
+                }
             }
         }
         private void maxHeapify(int heapSize, int index)
@@ -298,20 +317,28 @@ namespace Algorythme
             increment = 3;
             while (increment > 0)
             {
-                for (i = 0; i < TabSize; i++)
-                {
-                    j = i;
-                    temp = (int)Tab[i];
-                    while ((j >= increment) && ((int)Tab[j - increment] > temp))
+                if (!IsCanceled) { 
+                    for (i = 0; i < TabSize; i++)
                     {
-                        Tab[j] = Tab[j - increment];
+                        j = i;
+                        temp = (int)Tab[i];
+                        if (!IsCanceled)
+                        {
+                            while ((j >= increment) && ((int)Tab[j - increment] > temp))
+                            {
+                                if (!IsCanceled)
+                                {
+                                    Tab[j] = Tab[j - increment];
+                                    System.Threading.Thread.Sleep(Delay);
+                                    CurrentBar = j;
+                                    j = j - increment;
+                                }
+                            }
+                        }
+                        Tab[j] = temp;
                         System.Threading.Thread.Sleep(Delay);
                         CurrentBar = j;
-                        j = j - increment;
                     }
-                    Tab[j] = temp;
-                    System.Threading.Thread.Sleep(Delay);
-                    CurrentBar = j;
                 }
                 if (increment / 2 != 0)
                     increment = increment / 2;
@@ -329,24 +356,30 @@ namespace Algorythme
 
             int mid = low + N / 2;
 
-            mergeSort(low, mid);
-            mergeSort(mid, high);
+            if (!IsCanceled) { 
+                mergeSort(low, mid);
+                mergeSort(mid, high);
+            }
 
             int[] aux = new int[N];
             int i = low, j = mid;
-            for (int k = 0; k < N; k++)
-            {
-                if (i == mid) aux[k] = (int)Tab[j++];
-                else if (j == high) aux[k] = (int)Tab[i++];
-                else if ((int)Tab[i] > (int)Tab[j]) aux[k] = (int)Tab[j++];
-                else aux[k] = (int)Tab[i++];
+            if (!IsCanceled) {
+                for (int k = 0; k < N; k++)
+                {
+                    if (i == mid) aux[k] = (int)Tab[j++];
+                    else if (j == high) aux[k] = (int)Tab[i++];
+                    else if ((int)Tab[i] > (int)Tab[j]) aux[k] = (int)Tab[j++];
+                    else aux[k] = (int)Tab[i++];
+                }
             }
-
-            for (int k = 0; k < N; k++)
+            if (!IsCanceled)
             {
-                Tab[low + k] = aux[k];
-                System.Threading.Thread.Sleep(Delay);
-                CurrentBar = low + k;
+                for (int k = 0; k < N; k++)
+                {
+                    Tab[low + k] = aux[k];
+                    System.Threading.Thread.Sleep(Delay);
+                    CurrentBar = low + k;
+                }
             }
         }
         public void cocktailSort()
@@ -357,11 +390,13 @@ namespace Algorythme
                 swapped = false;
                 for (int i = 0; i <= TabSize - 2; i++)
                 {
-                    if ((int)Tab[i] > (int)Tab[i + 1])
-                    {
-                        //test whether the two elements are in the wrong order
-                        SwapAndSleep(i + 1, i);
-                        swapped = true;
+                    if (!IsCanceled) { 
+                        if ((int)Tab[i] > (int)Tab[i + 1])
+                        {
+                            //test whether the two elements are in the wrong order
+                            SwapAndSleep(i + 1, i);
+                            swapped = true;
+                        }
                     }
                 }
                 if (!swapped)
@@ -370,21 +405,27 @@ namespace Algorythme
                     break;
                 }
                 swapped = false;
-                for (int i = TabSize - 2; i >= 0; i--)
+                if (!IsCanceled)
                 {
-                    if ((int)Tab[i] > (int)Tab[i + 1])
+                    for (int i = TabSize - 2; i >= 0; i--)
                     {
-                        SwapAndSleep(i, i + 1);
-                        swapped = true;
+                        if (!IsCanceled)
+                        {
+                            if ((int)Tab[i] > (int)Tab[i + 1])
+                            {
+                                SwapAndSleep(i, i + 1);
+                                swapped = true;
+                            }
+                        }
                     }
                 }
                 //if no elements have been swapped, then the list is sorted
             } while (swapped);
         }
-        public void bogoSort()
+        public void bozoSort()
         {
             Random rnd = new Random();
-            while (!isSorted()) SwapAndSleep(rnd.Next(0, TabSize), rnd.Next(0, TabSize));
+            while (!isSorted() && !IsCanceled) SwapAndSleep(rnd.Next(0, TabSize), rnd.Next(0, TabSize));
         }
         private bool isSorted() // Inspired by http://stackoverflow.com/questions/18225010/c-sharp-functional-way-to-check-if-array-of-numbers-is-sequential
         {

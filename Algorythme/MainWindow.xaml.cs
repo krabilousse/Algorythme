@@ -34,6 +34,9 @@ namespace Algorythme
         Slider tabSize_Slider = null;
         ComboBox cb_Algos = null;
 
+        Button start_Button = null;
+        Button shuffle_Button = null;
+
         // Array & algorithm implementations
         private Algorithms algo;
 
@@ -82,13 +85,14 @@ namespace Algorythme
             Console.WriteLine("Finished sorting");
             tabSize_Slider.IsEnabled = true;
             cb_Algos.IsEnabled = true;
+            start_Button.Content = "Start";
             algo.CurrentBar = -1;
             addBars(canvas);
             StartStopSineWave();
         }
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-
+            algo.IsCanceled = false;
             switch (algo.CurrentAlgorithm)
             {
                 case "Quick Sort":
@@ -116,7 +120,7 @@ namespace Algorythme
                     algo.mergeSort(0, algo.TabSize);
                     break;
                 case "Bozo Sort":
-                    algo.bogoSort();
+                    algo.bozoSort();
                     break;
             }
         }
@@ -228,7 +232,18 @@ namespace Algorythme
                 tabSize_Slider.IsEnabled = false;
                 cb_Algos.IsEnabled = false;
 
+                start_Button.Content = (string)(start_Button.Content) == "Start" ? "Stop" : "Start";
+                //startBtn.IsEnabled = false;
+
                 StartStopSineWave();
+            }
+            else
+            {
+                if (start_Button.Content == "Stop")
+                {
+                    Console.WriteLine("Tits");
+                    algo.IsCanceled = true;
+                }
             }
         }
 
@@ -262,6 +277,17 @@ namespace Algorythme
         {
             this.tabSize_Slider = sender as Slider;
         }
-    }
 
+        private void ButtonStart_Loaded(object sender, RoutedEventArgs e)
+        {
+            start_Button = sender as Button;
+
+        }
+
+        private void Shuffle_Loaded(object sender, RoutedEventArgs e)
+        {
+            shuffle_Button = sender as Button;
+        }
+
+    }
 }
