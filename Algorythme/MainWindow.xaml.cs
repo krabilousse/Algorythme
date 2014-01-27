@@ -76,7 +76,6 @@ namespace Algorythme
 
             algo = new Algorithms(10, 10);
 
-            EventListener tabListener = new EventListener(algo.Tab);
             algo.Tab.Changed += Tab_Changed;
         }
 
@@ -133,7 +132,7 @@ namespace Algorythme
                 if (canvas != null)
                 {
                     addBars(canvas);
-                    sineWaveProvider.Frequency = (int)(((double)args.NewIndex + 1) / (double)algo.TabSize * 1000) + 450;
+                    if (DateTime.Now.Millisecond % 100 < 25) sineWaveProvider.Frequency = (int)(((double)args.NewIndex + 1) / (double)algo.TabSize * 1000) + 450;
                 }
             }
         }
@@ -241,7 +240,6 @@ namespace Algorythme
             {
                 if (start_Button.Content == "Stop")
                 {
-                    Console.WriteLine("Tits");
                     algo.IsCanceled = true;
                 }
             }

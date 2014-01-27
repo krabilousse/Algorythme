@@ -11,30 +11,6 @@ namespace Algorythme
     namespace MyCollections // Taken From Microsoft http://msdn.microsoft.com/en-us/library/aa645739(v=vs.71).aspx
     {
         using System.Collections;
-        public class EventListener
-        {
-            private ListWithChangedEvent List;
-
-            public EventListener(ListWithChangedEvent list)
-            {
-                List = list;
-                // Add "ListChanged" to the Changed event on "List".
-                List.Changed += new ChangedEventHandler(ListChanged);
-            }
-
-            // This will be called whenever the list changes.
-            private void ListChanged(object sender, EventArgs e)
-            {
-                //Console.WriteLine("This is called when the event fires.");
-            }
-
-            public void Detach()
-            {
-                // Detach the event and delete the list
-                List.Changed -= new ChangedEventHandler(ListChanged);
-                List = null;
-            }
-        }
 
         public class ValueChangedEventArgs : EventArgs
         {
